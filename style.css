@@ -10,7 +10,7 @@ body {
 }
 
 header {
-  width: 100%;
+  width: 850px;
   background-color: rgb(170, 170, 170);
   padding-bottom: 50px;
 }
@@ -28,12 +28,11 @@ h1 {
   position: relative;
   display: inline;
   top: 50px;
-  left: ;
 }
 
 #out-of-bounds {
-  height: 80vh;
-  width: 100vw;
+  height: 650px;
+  width: 850px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,14 +40,14 @@ h1 {
   border: 2px solid black;
 }
 
-#game-area {
-  height: 75vh;
-  width: 95vw;
+/* #gameCanvas {
+  height: 600px;
+  width: 800px;
   background-color: rgb(25, 77, 47);
   border: 2px black dotted;
-}
+} */
 
-#snake {
+/* #snake {
   height: 25px;
   width: 25px;
   background-color: black;
@@ -58,4 +57,4 @@ h1 {
   height: 25px;
   width: 25px;
   background-color: rgba(241, 56, 56, 0.753);
-}
+} */
