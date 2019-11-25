@@ -31,9 +31,15 @@ window.onload = function() {
   }, 1000 / framesPerSecond);
 };
 
+// canvas.addEventListener("keydown", function(e) {
+//   if (e.which == 38) {
+//     snakeY += snakeSpeedY;
+//   }
+// });
+
 function moveSnake() {
   snakeX = snakeX + snakeSpeedX; //this function needs to be called to move the snake
-  snakeY = snakeY + snakeSpeedY; //this function needs to be called to move the snake
+  //snakeY = snakeY + snakeSpeedY; //this function needs to be called to move the snake
 
   if (snakeX >= canvas.width) {
     snakeSpeedX = -snakeSpeedX;
