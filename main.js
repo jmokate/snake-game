@@ -1,11 +1,13 @@
 //KEY CODE REFERENCE
-// ARROW UP = 38
-// ARROW RIGHT = 39
-//ARROW DOWN = 40
-// ARROW LEFT = 37
+const UP = 38;
+const RIGHT = 39;
+const DOWN = 40;
+const LEFT = 37;
 
 let canvas;
 let canvasContext;
+
+let snake;
 
 let snakeX = 100;
 let snakeY = 100;
@@ -18,28 +20,44 @@ let apple = 600;
 let score = 0;
 
 window.onload = function() {
-  //alert("welcome to da snake game!");
   canvas = document.querySelector("#gameCanvas");
   canvas.width = 800;
   canvas.height = 600;
   canvasContext = canvas.getContext("2d");
 
   const framesPerSecond = 30;
+
+  // setInterval(drawEverything, 1000 / framesPerSecond);
+
+  alert("press an arrow key to start the game");
+
   setInterval(function() {
     moveSnake();
     drawEverything();
   }, 1000 / framesPerSecond);
+
+  // document.addEventListener("keydown", function(e) {
+  //   if (e.keyCode == UP) {
+  //     snakeSpeedX = 0;
+  //     snakeY -= snakeSpeedY;
+
+  //     console.log("up key");
+  //   }
+  // });
 };
 
-// canvas.addEventListener("keydown", function(e) {
-//   if (e.which == 38) {
-//     snakeY += snakeSpeedY;
-//   }
-// });
-
 function moveSnake() {
+  console.log("snake is moving");
   snakeX = snakeX + snakeSpeedX; //this function needs to be called to move the snake
   //snakeY = snakeY + snakeSpeedY; //this function needs to be called to move the snake
+  // document.addEventListener("keydown", function(e) {
+  //   if (e.keyCode == UP) {
+  //     snakeSpeedX = 0;
+  //     snakeY -= snakeSpeedY;
+
+  //     console.log("up key");
+  //   }
+  // });
 
   if (snakeX >= canvas.width) {
     snakeSpeedX = -snakeSpeedX;
@@ -57,13 +75,22 @@ function moveSnake() {
   }
 }
 
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == UP) {
+    snakeSpeedX = 0;
+    snakeY -= snakeSpeedY;
+
+    console.log("up key");
+  }
+});
+
 function gameOver() {
-  clearInterval(moveSnake());
-  clearInterval(drawEverything()); //last thing working on
+  clearInterval(moveSnake);
+  clearInterval(drawEverything);
 }
 
 function drawEverything() {
-  console.log(snakeX);
+  // console.log(snakeX);
   //creates game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
   //draws the apple
