@@ -12,8 +12,8 @@ let snake;
 let snakeX = 100;
 let snakeY = 100;
 
-let snakeSpeedX = 5;
-let snakeSpeedY = 5;
+let snakeSpeedX = 0;
+let snakeSpeedY = 0;
 
 let apple = 600;
 
@@ -29,35 +29,19 @@ window.onload = function() {
 
   // setInterval(drawEverything, 1000 / framesPerSecond);
 
-  alert("press an arrow key to start the game");
-
   setInterval(function() {
     moveSnake();
     drawEverything();
   }, 1000 / framesPerSecond);
-
-  // document.addEventListener("keydown", function(e) {
-  //   if (e.keyCode == UP) {
-  //     snakeSpeedX = 0;
-  //     snakeY -= snakeSpeedY;
-
-  //     console.log("up key");
-  //   }
-  // });
 };
 
 function moveSnake() {
   console.log("snake is moving");
-  snakeX = snakeX + snakeSpeedX; //this function needs to be called to move the snake
-  //snakeY = snakeY + snakeSpeedY; //this function needs to be called to move the snake
-  // document.addEventListener("keydown", function(e) {
-  //   if (e.keyCode == UP) {
-  //     snakeSpeedX = 0;
-  //     snakeY -= snakeSpeedY;
+  console.log("snakeX: ", snakeX);
+  console.log("snakeY: ", snakeY);
 
-  //     console.log("up key");
-  //   }
-  // });
+  snakeY -= snakeSpeedY; //move up
+  snakeX += snakeSpeedX; //move right
 
   if (snakeX >= canvas.width) {
     snakeSpeedX = -snakeSpeedX;
@@ -78,9 +62,30 @@ function moveSnake() {
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == UP) {
     snakeSpeedX = 0;
-    snakeY -= snakeSpeedY;
+    snakeSpeedY = 5;
 
     console.log("up key");
+  }
+});
+
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == RIGHT) {
+    snakeSpeedY = 0;
+    snakeSpeedX = 5;
+  }
+});
+
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == DOWN) {
+    snakeSpeedX = 0;
+    snakeSpeedY = -5;
+  }
+});
+
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == LEFT) {
+    snakeSpeedY = 0;
+    snakeSpeedX = -5;
   }
 });
 
