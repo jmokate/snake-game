@@ -1,3 +1,4 @@
+const DEBUG = false;
 //KEY CODE REFERENCE
 const UP = 38;
 const RIGHT = 39;
@@ -7,7 +8,7 @@ const LEFT = 37;
 let canvas;
 let canvasContext;
 
-let snake;
+let snakeEdge = 15;
 
 let snakeX = 100;
 let snakeY = 100;
@@ -28,11 +29,12 @@ window.onload = function() {
   const framesPerSecond = 30;
 
   // setInterval(drawEverything, 1000 / framesPerSecond);
-
-  setInterval(function() {
-    moveSnake();
-    drawEverything();
-  }, 1000 / framesPerSecond);
+  moveSnake();
+  drawEverything();
+  // setInterval(function() {
+  //   moveSnake();
+  //   drawEverything();
+  // }, 1000 / framesPerSecond);
 };
 
 function moveSnake() {
@@ -43,20 +45,22 @@ function moveSnake() {
   snakeY -= snakeSpeedY; //move up
   snakeX += snakeSpeedX; //move right
 
-  if (snakeX >= canvas.width) {
+  if (snakeX >= canvas.width - snakeEdge) {
+    //remember 15 is size of snake. maybe make variable for this
     snakeSpeedX = -snakeSpeedX;
     //gameOver();
   }
   if (snakeX < 0) {
     snakeSpeedX = -snakeSpeedX;
   }
-  if (snakeY >= canvas.height) {
+  if (snakeY >= canvas.height - snakeEdge) {
     snakeSpeedY = -snakeSpeedY;
     //gameOver();
   }
   if (snakeY < 0) {
     snakeSpeedY = -snakeSpeedY;
   }
+  requestAnimationFrame(moveSnake);
 }
 
 document.addEventListener("keydown", function(e) {
@@ -101,9 +105,10 @@ function drawEverything() {
   //draws the apple
   colorRect(600, 390, 15, 15, "red");
   //draws circlular apple
-  circleApple(apple, 100, 10, "red");
+  // circleApple(apple, 100, 10, "red");
   //draws the snake
   colorRect(snakeX, snakeY, 15, 15, "gray");
+  requestAnimationFrame(drawEverything);
 }
 //this function fills in color for everything
 function colorRect(leftX, topy, width, height, drawColor) {
@@ -112,9 +117,9 @@ function colorRect(leftX, topy, width, height, drawColor) {
 }
 
 //this function draws the circular apple
-function circleApple(centerX, centerY, radius, drawColor) {
-  canvasContext.fillstyle = drawColor;
-  canvasContext.beginPath();
-  canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
-  canvasContext.fill();
-}
+// function circleApple(centerX, centerY, radius, drawColor) {
+//   canvasContext.fillstyle = drawColor;
+//   canvasContext.beginPath();
+//   canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+//   canvasContext.fill();
+// }
