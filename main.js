@@ -5,10 +5,12 @@ const RIGHT = 39;
 const DOWN = 40;
 const LEFT = 37;
 
-let canvas;
-let canvasContext;
+// const canvas = document.querySelector("#gameCanvas");
+// // const canvas.width = 800;
+// // const canvas.height = 600;
+// const canvasContext = canvas.getContext("2d");
 
-let snakeEdge = 15;
+let snakeEdge = 20;
 
 let snakeX = 100;
 let snakeY = 100;
@@ -17,30 +19,67 @@ let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
 let apple = 600;
+let fps = 15;
 
 let score = 0;
+let canvasColumn = 40;
+let canvasRow = 30;
+let gridSquareWidth = 20;
+let gridSquareHeight = 20;
+let grid = [];
+
+for (c = 0; c < canvasColumn; c++) {
+  grid[c] = [];
+  for (r = 0; r < canvasRow; r++) {
+    grid[c][r] = { x: 0, y: 0 };
+  }
+}
 
 window.onload = function() {
-  canvas = document.querySelector("#gameCanvas");
-  canvas.width = 800;
-  canvas.height = 600;
-  canvasContext = canvas.getContext("2d");
-
-  const framesPerSecond = 30;
-
   // setInterval(drawEverything, 1000 / framesPerSecond);
-  moveSnake();
-  drawEverything();
+  drawCanvas();
+  //moveSnake();
+  setInterval(function() {
+    requestAnimationFrame(drawEverything);
+  }, 1000 / fps);
+
   // setInterval(function() {
   //   moveSnake();
   //   drawEverything();
   // }, 1000 / framesPerSecond);
 };
 
+function drawCanvas() {
+  canvas = document.querySelector("#gameCanvas");
+  canvas.width = 800;
+  canvas.height = 600;
+  canvasContext = canvas.getContext("2d");
+
+  //requestAnimationFrame(drawCanvas);
+}
+
+function drawGrid() {
+  for (c = 0; c < canvasColumn; c++) {
+    for (r = 0; r < canvasRow; r++) {
+      let gridX = c * gridSquareWidth;
+      let gridY = r * gridSquareHeight;
+      grid[c][r].x = gridX;
+      grid[c][r].y = gridY;
+      canvasContext.beginPath();
+      canvasContext.rect(gridX, gridY, gridSquareWidth, gridSquareHeight);
+      canvasContext.strokeStyle = "white";
+      canvasContext.stroke();
+      canvasContext.closePath();
+      //console.log(gridX);
+    }
+  }
+  //requestAnimationFrame(drawGrid);
+}
+
 function moveSnake() {
-  console.log("snake is moving");
-  console.log("snakeX: ", snakeX);
-  console.log("snakeY: ", snakeY);
+  //console.log("snake is moving");
+  //console.log("snakeX: ", snakeX);
+  //console.log("snakeY: ", snakeY);
 
   snakeY -= snakeSpeedY; //move up
   snakeX += snakeSpeedX; //move right
@@ -60,13 +99,13 @@ function moveSnake() {
   if (snakeY < 0) {
     snakeSpeedY = -snakeSpeedY;
   }
-  requestAnimationFrame(moveSnake);
+  //requestAnimationFrame(moveSnake);
 }
 
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == UP) {
     snakeSpeedX = 0;
-    snakeSpeedY = 5;
+    snakeSpeedY = 20;
 
     console.log("up key");
   }
@@ -75,21 +114,21 @@ document.addEventListener("keydown", function(e) {
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == RIGHT) {
     snakeSpeedY = 0;
-    snakeSpeedX = 5;
+    snakeSpeedX = 20;
   }
 });
 
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == DOWN) {
     snakeSpeedX = 0;
-    snakeSpeedY = -5;
+    snakeSpeedY = -20;
   }
 });
 
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == LEFT) {
     snakeSpeedY = 0;
-    snakeSpeedX = -5;
+    snakeSpeedX = -20;
   }
 });
 
@@ -103,12 +142,16 @@ function drawEverything() {
   //creates game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
   //draws the apple
-  colorRect(600, 390, 15, 15, "red");
+  colorRect(600, 390, 20, 20, "red");
   //draws circlular apple
   // circleApple(apple, 100, 10, "red");
   //draws the snake
-  colorRect(snakeX, snakeY, 15, 15, "gray");
-  requestAnimationFrame(drawEverything);
+  colorRect(snakeX, snakeY, 20, 20, "gray");
+
+  drawGrid();
+  moveSnake();
+
+  //requestAnimationFrame(drawEverything);
 }
 //this function fills in color for everything
 function colorRect(leftX, topy, width, height, drawColor) {
