@@ -5,11 +5,6 @@ const RIGHT = 39;
 const DOWN = 40;
 const LEFT = 37;
 
-// const canvas = document.querySelector("#gameCanvas");
-// // const canvas.width = 800;
-// // const canvas.height = 600;
-// const canvasContext = canvas.getContext("2d");
-
 let snakeEdge = 20;
 
 let snakeX = 100;
@@ -18,7 +13,7 @@ let snakeY = 100;
 let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
-let apple = 600;
+let apple;
 let fps = 15;
 
 let score = 0;
@@ -35,18 +30,16 @@ for (c = 0; c < canvasColumn; c++) {
   }
 }
 
+let randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
+let randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
+
 window.onload = function() {
-  // setInterval(drawEverything, 1000 / framesPerSecond);
   drawCanvas();
-  //moveSnake();
+  //appleSpawn();
+
   setInterval(function() {
     requestAnimationFrame(drawEverything);
   }, 1000 / fps);
-
-  // setInterval(function() {
-  //   moveSnake();
-  //   drawEverything();
-  // }, 1000 / framesPerSecond);
 };
 
 function drawCanvas() {
@@ -77,10 +70,6 @@ function drawGrid() {
 }
 
 function moveSnake() {
-  //console.log("snake is moving");
-  //console.log("snakeX: ", snakeX);
-  //console.log("snakeY: ", snakeY);
-
   snakeY -= snakeSpeedY; //move up
   snakeX += snakeSpeedX; //move right
 
@@ -99,15 +88,24 @@ function moveSnake() {
   if (snakeY < 0) {
     snakeSpeedY = -snakeSpeedY;
   }
+
+  if (snakeX == randomX && snakeY == randomY) {
+    console.log("score", score);
+    score++;
+    canvasContext.clearRect(randomX, randomY, 20, 20);
+    //appleSpawn();
+  }
   //requestAnimationFrame(moveSnake);
+}
+
+function appleSpawn() {
+  apple = colorRect(randomX, randomY, 20, 20, "red");
 }
 
 document.addEventListener("keydown", function(e) {
   if (e.keyCode == UP) {
     snakeSpeedX = 0;
     snakeSpeedY = 20;
-
-    console.log("up key");
   }
 });
 
@@ -138,21 +136,18 @@ function gameOver() {
 }
 
 function drawEverything() {
-  // console.log(snakeX);
-  //creates game canvas
+  //draws game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
-  //draws the apple
-  colorRect(600, 390, 20, 20, "red");
-  //draws circlular apple
-  // circleApple(apple, 100, 10, "red");
-  //draws the snake
-  colorRect(snakeX, snakeY, 20, 20, "gray");
 
+  // //draws the snake
+  colorRect(snakeX, snakeY, 20, 20, "green");
+
+  appleSpawn();
   drawGrid();
   moveSnake();
-
-  //requestAnimationFrame(drawEverything);
+  //colorRect(randomX, randomY, 20, 20, "red");
 }
+
 //this function fills in color for everything
 function colorRect(leftX, topy, width, height, drawColor) {
   canvasContext.fillStyle = drawColor;
