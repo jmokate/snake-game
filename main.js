@@ -7,13 +7,15 @@ const LEFT = 37;
 
 let snakeEdge = 20;
 
+let snake = { x: 100, y: 100 };
+
 let snakeX = 100;
 let snakeY = 100;
 
 let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
-let apple;
+let apple = { x: 0, y: 0 };
 let fps = 15;
 
 let score = 0;
@@ -34,22 +36,40 @@ let randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
 let randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
 
 window.onload = function() {
-  drawCanvas();
-  //appleSpawn();
+  //drawCanvas();
 
   setInterval(function() {
     requestAnimationFrame(drawEverything);
   }, 1000 / fps);
 };
 
-function drawCanvas() {
-  canvas = document.querySelector("#gameCanvas");
-  canvas.width = 800;
-  canvas.height = 600;
-  canvasContext = canvas.getContext("2d");
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == UP) {
+    snakeSpeedX = 0;
+    snakeSpeedY = 20;
+  }
+  if (e.keyCode == RIGHT) {
+    snakeSpeedY = 0;
+    snakeSpeedX = 20;
+  }
+  if (e.keyCode == DOWN) {
+    snakeSpeedX = 0;
+    snakeSpeedY = -20;
+  }
+  if (e.keyCode == LEFT) {
+    snakeSpeedY = 0;
+    snakeSpeedX = -20;
+  }
+});
 
-  //requestAnimationFrame(drawCanvas);
-}
+// function drawCanvas() {
+//   canvas = document.querySelector("#gameCanvas");
+//   canvas.width = 800;
+//   canvas.height = 600;
+//   canvasContext = canvas.getContext("2d");
+
+//   //requestAnimationFrame(drawCanvas);
+// }
 
 function drawGrid() {
   for (c = 0; c < canvasColumn; c++) {
@@ -60,8 +80,8 @@ function drawGrid() {
       grid[c][r].y = gridY;
       canvasContext.beginPath();
       canvasContext.rect(gridX, gridY, gridSquareWidth, gridSquareHeight);
-      canvasContext.strokeStyle = "white";
-      canvasContext.stroke();
+      //canvasContext.strokeStyle = "white";
+      //canvasContext.stroke();
       canvasContext.closePath();
       //console.log(gridX);
     }
@@ -93,42 +113,27 @@ function moveSnake() {
     console.log("score", score);
     score++;
     canvasContext.clearRect(randomX, randomY, 20, 20);
-    //appleSpawn();
+    newApple();
   }
-  //requestAnimationFrame(moveSnake);
 }
 
-function appleSpawn() {
-  apple = colorRect(randomX, randomY, 20, 20, "red");
+function newApple() {
+  randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
+  randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
+  colorRect(randomX, randomY, 20, 20, "red");
 }
 
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == UP) {
-    snakeSpeedX = 0;
-    snakeSpeedY = 20;
-  }
-});
-
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == RIGHT) {
-    snakeSpeedY = 0;
-    snakeSpeedX = 20;
-  }
-});
-
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == DOWN) {
-    snakeSpeedX = 0;
-    snakeSpeedY = -20;
-  }
-});
-
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == LEFT) {
-    snakeSpeedY = 0;
-    snakeSpeedX = -20;
-  }
-});
+// function appleSpawn() {
+//   apple = colorRect(randomX, randomY, 20, 20, "red");
+//   // if (snakeX == randomX && snakeY == randomY) {
+//   //   score++;
+//   //   canvasContext.clearRect(randomX, randomY, 20, 20);
+//   //   let randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
+//   //   let randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
+//   //   colorRect(randomX, randomY, 20, 20, "red");
+//   //   //appleSpawn();
+//   // }
+// }
 
 function gameOver() {
   clearInterval(moveSnake);
@@ -136,16 +141,20 @@ function gameOver() {
 }
 
 function drawEverything() {
+  canvas = document.querySelector("#gameCanvas");
+  canvas.width = 800;
+  canvas.height = 600;
+  canvasContext = canvas.getContext("2d");
   //draws game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
 
   // //draws the snake
   colorRect(snakeX, snakeY, 20, 20, "green");
 
-  appleSpawn();
+  //appleSpawn();
   drawGrid();
   moveSnake();
-  //colorRect(randomX, randomY, 20, 20, "red");
+  colorRect(randomX, randomY, 20, 20, "red");
 }
 
 //this function fills in color for everything
