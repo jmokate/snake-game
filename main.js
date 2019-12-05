@@ -7,15 +7,16 @@ const LEFT = 37;
 
 let snakeEdge = 20;
 
-let snake = { x: 100, y: 100 };
+let snake = [
+  { x: 100, y: 100 },
+  { x: 80, y: 100 }
+];
 
-let snakeX = 100;
-let snakeY = 100;
+snakeHead = snake[0];
 
 let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
-let apple = { x: 0, y: 0 };
 let fps = 15;
 
 let score = 0;
@@ -90,30 +91,35 @@ function drawGrid() {
 }
 
 function moveSnake() {
-  snakeY -= snakeSpeedY; //move up
-  snakeX += snakeSpeedX; //move right
+  for (i = 0; i < snake.length; i++) {
+    colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
 
-  if (snakeX >= canvas.width - snakeEdge) {
-    //remember 15 is size of snake. maybe make variable for this
-    snakeSpeedX = -snakeSpeedX;
-    //gameOver();
-  }
-  if (snakeX < 0) {
-    snakeSpeedX = -snakeSpeedX;
-  }
-  if (snakeY >= canvas.height - snakeEdge) {
-    snakeSpeedY = -snakeSpeedY;
-    //gameOver();
-  }
-  if (snakeY < 0) {
-    snakeSpeedY = -snakeSpeedY;
-  }
+    snake[i].y -= snakeSpeedY; //move up
+    snake[i].x += snakeSpeedX; //move right
 
-  if (snakeX == randomX && snakeY == randomY) {
-    console.log("score", score);
-    score++;
-    canvasContext.clearRect(randomX, randomY, 20, 20);
-    newApple();
+    // for (i = 1; i < snake.length; i++) {
+    // colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
+    // }
+    if (snake[i].x >= canvas.width - snakeEdge) {
+      snakeSpeedX = -snakeSpeedX;
+      //gameOver();
+    }
+    if (snake[i].x < 0) {
+      snakeSpeedX = -snakeSpeedX;
+    }
+    if (snake[i].y >= canvas.height - snakeEdge) {
+      snakeSpeedY = -snakeSpeedY;
+      //gameOver();
+    }
+    if (snake[i].y < 0) {
+      snakeSpeedY = -snakeSpeedY;
+    }
+
+    if (snake[i].x == randomX && snake[0].y == randomY) {
+      console.log("score", score);
+      score++;
+      newApple();
+    }
   }
 }
 
@@ -122,18 +128,6 @@ function newApple() {
   randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
   colorRect(randomX, randomY, 20, 20, "red");
 }
-
-// function appleSpawn() {
-//   apple = colorRect(randomX, randomY, 20, 20, "red");
-//   // if (snakeX == randomX && snakeY == randomY) {
-//   //   score++;
-//   //   canvasContext.clearRect(randomX, randomY, 20, 20);
-//   //   let randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
-//   //   let randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
-//   //   colorRect(randomX, randomY, 20, 20, "red");
-//   //   //appleSpawn();
-//   // }
-// }
 
 function gameOver() {
   clearInterval(moveSnake);
@@ -148,18 +142,18 @@ function drawEverything() {
   //draws game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
 
-  // //draws the snake
-  colorRect(snakeX, snakeY, 20, 20, "green");
+  //draws the snake
 
-  //appleSpawn();
   drawGrid();
   moveSnake();
-  colorRect(randomX, randomY, 20, 20, "red");
+  apple = colorRect(randomX, randomY, 20, 20, "red");
 }
 
 //this function fills in color for everything
-function colorRect(leftX, topy, width, height, drawColor) {
+function colorRect(leftX, topy, width, height, drawColor, strokeColor) {
   canvasContext.fillStyle = drawColor;
+  canvasContext.strokeStyle = strokeColor;
+  canvasContext.strokeRect(leftX, topy, width, height);
   canvasContext.fillRect(leftX, topy, width, height);
 }
 
