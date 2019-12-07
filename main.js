@@ -9,15 +9,16 @@ let snakeEdge = 20;
 
 let snake = [
   { x: 100, y: 100 },
-  { x: 80, y: 100 }
+  { x: 80, y: 100 },
+  { x: 60, y: 100 }
 ];
 
-snakeHead = snake[0];
+//snakeHead = snake[0];
 
 let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
-let fps = 15;
+let fps = 1;
 
 let score = 0;
 let canvasColumn = 40;
@@ -91,15 +92,31 @@ function drawGrid() {
 }
 
 function moveSnake() {
+  let snakeCopy = snake.slice();
+  //snakeCopy.push({ x: 120, y: 140 });
+
+  console.log(snakeCopy);
+  console.log(snake);
+
   for (i = 0; i < snake.length; i++) {
     colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
 
-    snake[i].y -= snakeSpeedY; //move up
-    snake[i].x += snakeSpeedX; //move right
+    // if iteration is 0 then run code
+    if (snake[i] == snake[0]) {
+      snake[i].y -= snakeSpeedY; //move up
+      snake[i].x += snakeSpeedX; //move right
+    } //else update current snake copy?
+    else {
+      snake.unshift({ x: snake[0].x, y: snake[0].y });
+      snake.pop();
+      // snake.push({ x: snake[i].x, y: snake[i].y });
 
-    // for (i = 1; i < snake.length; i++) {
-    // colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
-    // }
+      // colorRect(snakeCopy[i].x, snakeCopy[i].y, 20, 20, "yellow");
+      // snakeCopy[i] == snake[i];
+      // snakeCopy.unshift({ x: snakeCopy[0].x, y: snakeCopy[0].y });
+      // snakeCopy.pop();
+    }
+
     if (snake[i].x >= canvas.width - snakeEdge) {
       snakeSpeedX = -snakeSpeedX;
       //gameOver();
@@ -142,8 +159,6 @@ function drawEverything() {
   //draws game canvas
   colorRect(0, 0, canvas.width, canvas.height, "black");
 
-  //draws the snake
-
   drawGrid();
   moveSnake();
   apple = colorRect(randomX, randomY, 20, 20, "red");
@@ -156,11 +171,3 @@ function colorRect(leftX, topy, width, height, drawColor, strokeColor) {
   canvasContext.strokeRect(leftX, topy, width, height);
   canvasContext.fillRect(leftX, topy, width, height);
 }
-
-//this function draws the circular apple
-// function circleApple(centerX, centerY, radius, drawColor) {
-//   canvasContext.fillstyle = drawColor;
-//   canvasContext.beginPath();
-//   canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
-//   canvasContext.fill();
-// }
