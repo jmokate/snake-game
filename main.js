@@ -10,7 +10,8 @@ let snakeEdge = 20;
 let snake = [
   { x: 100, y: 100 },
   { x: 80, y: 100 },
-  { x: 60, y: 100 }
+  { x: 60, y: 100 },
+  { x: 40, y: 100 }
 ];
 
 //snakeHead = snake[0];
@@ -92,7 +93,12 @@ function drawGrid() {
 }
 
 function moveSnake() {
-  let snakeCopy = snake.slice();
+  let snakeCopy = [];
+
+  snake.forEach(bodyPart => {
+    snakeCopy.push({ x: bodyPart.x, y: bodyPart.y });
+  });
+
   //snakeCopy.push({ x: 120, y: 140 });
 
   console.log(snakeCopy);
@@ -102,19 +108,18 @@ function moveSnake() {
     colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
 
     // if iteration is 0 then run code
-    if (snake[i] == snake[0]) {
+    if (i == 0) {
       snake[i].y -= snakeSpeedY; //move up
       snake[i].x += snakeSpeedX; //move right
     } //else update current snake copy?
     else {
-      snake.unshift({ x: snake[0].x, y: snake[0].y });
-      snake.pop();
-      // snake.push({ x: snake[i].x, y: snake[i].y });
+      snake[i].y = snakeCopy[i - 1].y;
+      snake[i].x = snakeCopy[i - 1].x;
 
-      // colorRect(snakeCopy[i].x, snakeCopy[i].y, 20, 20, "yellow");
-      // snakeCopy[i] == snake[i];
-      // snakeCopy.unshift({ x: snakeCopy[0].x, y: snakeCopy[0].y });
-      // snakeCopy.pop();
+      //set the current snake part's x position equal to the old "parent" part's x position.
+      //set the current snake part's y position equal to the old "parent" part's y position.
+
+      colorRect(snakeCopy[i].x, snakeCopy[i].y, 20, 20, "yellow");
     }
 
     if (snake[i].x >= canvas.width - snakeEdge) {
@@ -136,6 +141,9 @@ function moveSnake() {
       console.log("score", score);
       score++;
       newApple();
+      snake.forEach(bodyPart => {
+        snake.push({ x: bodyPart.x, y: bodyPart.y });
+      });
     }
   }
 }
