@@ -10,7 +10,7 @@ body {
 }
 
 header {
-  width: 850px;
+  width: 800px;
   background-color: rgb(170, 170, 170);
   padding-bottom: 50px;
 }
@@ -30,7 +30,7 @@ h1 {
   top: 50px;
 }
 
-#out-of-bounds {
+/* #out-of-bounds {
   height: 650px;
   width: 850px;
   display: flex;
@@ -38,7 +38,7 @@ h1 {
   align-items: center;
   background-color: rgb(107, 20, 20);
   border: 2px solid black;
-}
+} */
 
 /* #gameCanvas {
   height: 600px;

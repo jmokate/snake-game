@@ -1,31 +1,24 @@
 const DEBUG = false;
-//KEY CODE REFERENCE
+
 const UP = 38;
 const RIGHT = 39;
 const DOWN = 40;
 const LEFT = 37;
 
-let snakeEdge = 20;
+const snakeEdge = 20;
 
-let snake = [
-  { x: 100, y: 100 },
-  { x: 80, y: 100 },
-  { x: 60, y: 100 },
-  { x: 40, y: 100 }
-];
-
-//snakeHead = snake[0];
+let snake = [{ x: 100, y: 100 }];
 
 let snakeSpeedX = 0;
 let snakeSpeedY = 0;
 
-let fps = 1;
+let fps = 10;
 
 let score = 0;
-let canvasColumn = 40;
-let canvasRow = 30;
-let gridSquareWidth = 20;
-let gridSquareHeight = 20;
+const canvasColumn = 40;
+const canvasRow = 30;
+const gridSquareWidth = 20;
+const gridSquareHeight = 20;
 let grid = [];
 
 for (c = 0; c < canvasColumn; c++) {
@@ -38,7 +31,52 @@ for (c = 0; c < canvasColumn; c++) {
 let randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
 let randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
 
+let keyDirectionUp = true;
+let keyDirectionRight = true;
+let keyDirectionDown = true;
+let keyDirectionLeft = true;
+
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode == UP) {
+    if (keyDirectionUp == true) {
+      snakeSpeedX = 0;
+      snakeSpeedY = 20;
+      keyDirectionDown = false;
+      keyDirectionRight = true;
+      keyDirectionLeft = true;
+    }
+  }
+  if (e.keyCode == RIGHT) {
+    if (keyDirectionRight == true) {
+      snakeSpeedY = 0;
+      snakeSpeedX = 20;
+      keyDirectionLeft = false;
+      keyDirectionUp = true;
+      keyDirectionDown = true;
+    }
+  }
+  if (e.keyCode == DOWN) {
+    if (keyDirectionDown == true) {
+      snakeSpeedX = 0;
+      snakeSpeedY = -20;
+      keyDirectionUp = false;
+      keyDirectionRight = true;
+      keyDirectionLeft = true;
+    }
+  }
+  if (e.keyCode == LEFT) {
+    if (keyDirectionLeft == true) {
+      snakeSpeedY = 0;
+      snakeSpeedX = -20;
+      keyDirectionRight = false;
+      keyDirectionUp = true;
+      keyDirectionDown = true;
+    }
+  }
+});
+
 window.onload = function() {
+  drawEverything();
   //drawCanvas();
 
   setInterval(function() {
@@ -46,33 +84,13 @@ window.onload = function() {
   }, 1000 / fps);
 };
 
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode == UP) {
-    snakeSpeedX = 0;
-    snakeSpeedY = 20;
-  }
-  if (e.keyCode == RIGHT) {
-    snakeSpeedY = 0;
-    snakeSpeedX = 20;
-  }
-  if (e.keyCode == DOWN) {
-    snakeSpeedX = 0;
-    snakeSpeedY = -20;
-  }
-  if (e.keyCode == LEFT) {
-    snakeSpeedY = 0;
-    snakeSpeedX = -20;
-  }
-});
-
-// function drawCanvas() {
-//   canvas = document.querySelector("#gameCanvas");
-//   canvas.width = 800;
-//   canvas.height = 600;
-//   canvasContext = canvas.getContext("2d");
-
-//   //requestAnimationFrame(drawCanvas);
-// }
+function drawCanvas() {
+  canvas = document.querySelector("#gameCanvas");
+  canvas.width = 800;
+  canvas.height = 600;
+  canvasContext = canvas.getContext("2d");
+  colorRect(0, 0, canvas.width, canvas.height, "black");
+}
 
 function drawGrid() {
   for (c = 0; c < canvasColumn; c++) {
@@ -83,13 +101,10 @@ function drawGrid() {
       grid[c][r].y = gridY;
       canvasContext.beginPath();
       canvasContext.rect(gridX, gridY, gridSquareWidth, gridSquareHeight);
-      //canvasContext.strokeStyle = "white";
-      //canvasContext.stroke();
+
       canvasContext.closePath();
-      //console.log(gridX);
     }
   }
-  //requestAnimationFrame(drawGrid);
 }
 
 function moveSnake() {
@@ -99,15 +114,9 @@ function moveSnake() {
     snakeCopy.push({ x: bodyPart.x, y: bodyPart.y });
   });
 
-  //snakeCopy.push({ x: 120, y: 140 });
-
-  console.log(snakeCopy);
-  console.log(snake);
-
   for (i = 0; i < snake.length; i++) {
     colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
 
-    // if iteration is 0 then run code
     if (i == 0) {
       snake[i].y -= snakeSpeedY; //move up
       snake[i].x += snakeSpeedX; //move right
@@ -115,48 +124,64 @@ function moveSnake() {
     else {
       snake[i].y = snakeCopy[i - 1].y;
       snake[i].x = snakeCopy[i - 1].x;
-
-      //set the current snake part's x position equal to the old "parent" part's x position.
-      //set the current snake part's y position equal to the old "parent" part's y position.
-
-      colorRect(snakeCopy[i].x, snakeCopy[i].y, 20, 20, "yellow");
-    }
-
-    if (snake[i].x >= canvas.width - snakeEdge) {
-      snakeSpeedX = -snakeSpeedX;
-      //gameOver();
-    }
-    if (snake[i].x < 0) {
-      snakeSpeedX = -snakeSpeedX;
-    }
-    if (snake[i].y >= canvas.height - snakeEdge) {
-      snakeSpeedY = -snakeSpeedY;
-      //gameOver();
-    }
-    if (snake[i].y < 0) {
-      snakeSpeedY = -snakeSpeedY;
-    }
-
-    if (snake[i].x == randomX && snake[0].y == randomY) {
-      console.log("score", score);
-      score++;
-      newApple();
-      snake.forEach(bodyPart => {
-        snake.push({ x: bodyPart.x, y: bodyPart.y });
-      });
     }
   }
+
+  for (i = 1; i < snake.length; i++) {
+    if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+      gameOver();
+    }
+  }
+
+  if (snake[0].x > canvas.width) {
+    gameOver();
+  }
+  if (snake[0].x < -20) {
+    gameOver();
+  }
+  if (snake[0].y > canvas.height) {
+    gameOver();
+  }
+  if (snake[0].y < -20) {
+    gameOver();
+  }
+
+  if (snake[0].x === randomX && snake[0].y === randomY) {
+    console.log("score", score);
+    score++;
+    newApple();
+    snake.push({ x: snake.x, y: snake.y });
+    console.log(snake);
+  }
 }
+
+let appleSpawningOnSnake = false;
 
 function newApple() {
   randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
   randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
-  colorRect(randomX, randomY, 20, 20, "red");
+
+  snake.forEach(bodyPart => {
+    if (randomX !== bodyPart.x && randomY !== bodyPart.y) {
+      appleSpawningOnSnake = false;
+      colorRect(randomX, randomY, 20, 20, "red");
+    } else if (randomX == bodyPart.x && randomY == bodyPart.y) {
+      appleSpawnOnSnake = true;
+      randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
+      randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
+    }
+  });
+
+  // if (randomX && randomY !== snake.x && snake.y) {
+  //   appleSpawningOnSnake = false;
+  //   colorRect(randomX, randomY, 20, 20, "red");
+  // }
+  console.log(appleSpawningOnSnake);
 }
 
 function gameOver() {
-  clearInterval(moveSnake);
-  clearInterval(drawEverything);
+  document.location.reload();
+  alert("you died :(");
 }
 
 function drawEverything() {
@@ -165,11 +190,18 @@ function drawEverything() {
   canvas.height = 600;
   canvasContext = canvas.getContext("2d");
   //draws game canvas
-  colorRect(0, 0, canvas.width, canvas.height, "black");
-
+  //colorRect(0, 0, canvas.width, canvas.height, "black");
+  drawCanvas();
   drawGrid();
   moveSnake();
   apple = colorRect(randomX, randomY, 20, 20, "red");
+  drawScore();
+}
+
+function drawScore() {
+  canvasContext.font = "16px arial";
+  canvasContext.fillStyle = "white";
+  canvasContext.fillText("Score: " + score, 360, 20);
 }
 
 //this function fills in color for everything
