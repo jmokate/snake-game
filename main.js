@@ -115,8 +115,6 @@ function moveSnake() {
   });
 
   for (i = 0; i < snake.length; i++) {
-    colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
-
     if (i == 0) {
       snake[i].y -= snakeSpeedY; //move up
       snake[i].x += snakeSpeedX; //move right
@@ -125,6 +123,7 @@ function moveSnake() {
       snake[i].y = snakeCopy[i - 1].y;
       snake[i].x = snakeCopy[i - 1].x;
     }
+    colorRect(snake[i].x, snake[i].y, 20, 20, "green", "white");
   }
 
   for (i = 1; i < snake.length; i++) {
@@ -133,16 +132,16 @@ function moveSnake() {
     }
   }
 
-  if (snake[0].x > canvas.width) {
+  if (snake[0].x > canvas.width - 20) {
     gameOver();
   }
-  if (snake[0].x < -20) {
+  if (snake[0].x < 0) {
     gameOver();
   }
-  if (snake[0].y > canvas.height) {
+  if (snake[0].y > canvas.height - 20) {
     gameOver();
   }
-  if (snake[0].y < -20) {
+  if (snake[0].y < 0) {
     gameOver();
   }
 
@@ -155,18 +154,14 @@ function moveSnake() {
   }
 }
 
-let appleSpawningOnSnake = false;
-
 function newApple() {
   randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
   randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
 
   snake.forEach(bodyPart => {
     if (randomX !== bodyPart.x && randomY !== bodyPart.y) {
-      appleSpawningOnSnake = false;
       colorRect(randomX, randomY, 20, 20, "red");
     } else if (randomX == bodyPart.x && randomY == bodyPart.y) {
-      appleSpawnOnSnake = true;
       randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
       randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
     }
@@ -176,7 +171,7 @@ function newApple() {
   //   appleSpawningOnSnake = false;
   //   colorRect(randomX, randomY, 20, 20, "red");
   // }
-  console.log(appleSpawningOnSnake);
+  //console.log(appleSpawningOnSnake);
 }
 
 function gameOver() {
