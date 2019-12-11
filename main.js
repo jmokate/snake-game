@@ -152,11 +152,12 @@
     randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
 
     snake.forEach(bodyPart => {
-      if (randomX !== bodyPart.x && randomY !== bodyPart.y) {
-        colorRect(randomX, randomY, 20, 20, "red");
-      } else if (randomX == bodyPart.x && randomY == bodyPart.y) {
+      if (randomX == bodyPart.x && randomY == bodyPart.y) {
         randomX = gridSquareWidth * Math.floor(Math.random() * canvasColumn);
         randomY = gridSquareHeight * Math.floor(Math.random() * canvasRow);
+      }
+      if (randomX !== bodyPart.x && randomY !== bodyPart.y) {
+        colorRect(randomX, randomY, 20, 20, "red");
       }
     });
   }
