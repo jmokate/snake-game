@@ -6,4 +6,6 @@
 
 ![image of html5](images/html.png) ![image of js](images/javascript.png)
 
+## How To Play:
+
 #### Run this game by downloading the index.html and main.js files, then open index.html in your browser.
